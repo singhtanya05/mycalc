@@ -65,7 +65,7 @@ export default function App() {
     setError(null);
     setShowSteps(false);
     try {
-      const response = await fetch('http://localhost:8081/api/v1/solve', {
+      const response = await fetch('/api/v1/solve', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ equation, problemType }),
@@ -98,7 +98,7 @@ export default function App() {
     formData.append('file', file);
 
     try {
-      const response = await fetch('http://localhost:8081/api/v1/scan', {
+      const response = await fetch('/api/v1/scan', {
         method: 'POST',
         body: formData,
       });
