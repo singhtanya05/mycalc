@@ -383,8 +383,13 @@ export default function App() {
               )}
             </div>
           )}
-        </section>
       </main>
+
+      <footer className="app-footer">
+        <p>
+          Made with ❤️ by Tanya | 2026 | <Latex math="\int \text{passion} \, d(\text{code}) = \text{mycalc}" block={false} />
+        </p>
+      </footer>
     </div>
   );
 }

@@ -665,3 +665,28 @@ body {
 .katex-display::-webkit-scrollbar-thumb:hover {
   background: rgba(0, 0, 0, 0.28);
 }
+
+/* Footer Styling */
+.app-footer {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.03);
+  margin-top: 5rem;
+  background: rgba(8, 11, 17, 0.5);
+  backdrop-filter: blur(10px);
+}
+
+.app-footer p {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.app-footer .katex {
+  color: var(--accent-primary) !important;
+}
+
