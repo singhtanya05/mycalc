@@ -2,22 +2,22 @@
 
 # Configuration Variables
 IP="15.135.213.23"
-KEY_PATH="$HOME/Downloads/mycalc-key.pem"
+KEY_PATH="./mycalc-key.pem"
 REMOTE_USER="ubuntu"
 JAR_NAME="calc-backend-0.0.1-SNAPSHOT.jar"
 
 echo "🚀 Starting deployment of mycalc to EC2 ($IP)..."
 
 # Ensure the SSH key exists
-if [ ! -f eval echo $KEY_PATH ]; then
-    # Resolve tilde if needed
-    KEY_PATH_EXPANDED=$(eval echo $KEY_PATH)
-    if [ ! -f "$KEY_PATH_EXPANDED" ]; then
-        echo "❌ SSH Key not found at $KEY_PATH_EXPANDED."
-        echo "Please ensure your key is in your Downloads folder or edit this script to update KEY_PATH."
+if [ ! -f "$KEY_PATH" ]; then
+    # Fallback to Downloads
+    KEY_PATH="$HOME/Downloads/mycalc-key.pem"
+    if [ ! -f "$KEY_PATH" ]; then
+        echo "❌ SSH Key 'mycalc-key.pem' not found in current folder or Downloads folder."
+        echo "Please drag and drop your downloaded 'mycalc-key.pem' file into this project folder:"
+        echo "  /Users/tanya/projects/calc/"
         exit 1
     fi
-    KEY_PATH="$KEY_PATH_EXPANDED"
 fi
 
 # Set proper permissions for SSH key
