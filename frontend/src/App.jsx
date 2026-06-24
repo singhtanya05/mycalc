@@ -383,6 +383,7 @@ export default function App() {
               )}
             </div>
           )}
+        </section>
       </main>
 
       <footer className="app-footer">
