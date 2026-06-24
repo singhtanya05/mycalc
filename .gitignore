@@ -4,6 +4,8 @@
 *.swp
 *.swo
 .DS_Store
+*.pem
+
 
 # Java Backend
 backend/target/
