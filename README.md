@@ -71,11 +71,28 @@ The standard and most reliable way to run the full application (Frontend + Backe
 
 1. Ensure Docker Desktop is running.
 2. Clone the repository and navigate to the root directory.
-3. Run the following command:
+3. Start the containers in the background:
    ```bash
-   docker-compose up --build
+   docker-compose up -d --build
    ```
-4. Access the application via `http://localhost`.
+
+**Accessing the Application:**
+- **Frontend (UI):** [http://localhost](http://localhost) (Port `80`)
+- **Backend (API):** `http://localhost:8081`
+
+**Useful Docker Commands:**
+- **View all logs in real-time:**
+  ```bash
+  docker-compose logs -f
+  ```
+- **View backend logs only:**
+  ```bash
+  docker-compose logs -f backend
+  ```
+- **Stop all containers:**
+  ```bash
+  docker-compose down
+  ```
 
 ## 💻 How to Run Locally (Manual Development)
 For active development on independent microservices:
