@@ -4,6 +4,8 @@ Welcome to **mycalc**, an advanced, full-stack mathematical solving engine. This
 
 **🌐 Live Demo:** [http://mycalc.duckdns.org/](http://mycalc.duckdns.org/)
 
+<video src="./Screen%20Recording%202026-06-27%20at%202.19.02%E2%80%AFPM-1.mov" controls="controls" style="max-width: 100%;"></video>
+
 ## 🏗 System Architecture Flow
 
 ```mermaid
