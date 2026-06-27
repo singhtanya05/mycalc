@@ -112,6 +112,17 @@ npm run dev
 ```
 *The UI will run on `http://localhost:5173` (or 5174).*
 
+### 3. Start the Open-Source Python OCR Server (Optional)
+If you do not want to use Mathpix, you can run the `Pix2Tex` LaTeX-OCR AI locally on your machine.
+```bash
+# Install the python package
+pip install pix2tex[api]
+
+# Start the local AI server
+pix2tex_api
+```
+*The local AI server will run on `http://localhost:8502`. The Java backend will automatically detect it and use it as a fallback when Mathpix keys are not provided!*
+
 ## 🔐 Environment Variables (OCR Configuration)
 To enable accurate cloud-based image scanning, create a free account at [Mathpix](https://mathpix.com/) to obtain API credentials. Alternatively, if you have deployed the open-source **Pix2Tex / LaTeX-OCR** Python model to your own server, you can point the application to it.
 
