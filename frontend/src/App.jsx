@@ -57,9 +57,27 @@ export default function App() {
     }, 50);
   };
 
+  const isBalanced = (str) => {
+    const stack = [];
+    const pairs = { '(': ')', '[': ']', '{': '}' };
+    for (let char of str) {
+      if (pairs[char]) stack.push(char);
+      else if (Object.values(pairs).includes(char)) {
+        if (pairs[stack.pop()] !== char) return false;
+      }
+    }
+    return stack.length === 0;
+  };
+
   const handleSolve = async (e) => {
     if (e) e.preventDefault();
-    if (!equation.trim()) return;
+    const trimmed = equation.trim();
+    if (!trimmed) return;
+
+    if (!isBalanced(trimmed)) {
+      setError('Unbalanced parentheses or brackets in the equation.');
+      return;
+    }
 
     setLoading(true);
     setError(null);
@@ -132,24 +150,47 @@ export default function App() {
   };
 
   const mathKeys = [
-    { label: 'x', value: 'x' },
-    { label: 'y', value: 'y' },
-    { label: '+', value: '+' },
-    { label: '-', value: '-' },
-    { label: '=', value: '=' },
-    { label: 'd/dx', value: 'd/dx(' },
-    { label: '∫', value: 'integrate ' },
-    { label: 'lim', value: 'Limit(' },
-    { label: '^2', value: '^2' },
-    { label: '^n', value: '^' },
-    { label: '√', value: 'Sqrt(' },
-    { label: 'π', value: 'pi' },
+    { label: '7', value: '7' },
+    { label: '8', value: '8' },
+    { label: '9', value: '9' },
+    { label: '÷', value: '/' },
     { label: 'sin', value: 'sin(' },
     { label: 'cos', value: 'cos(' },
+    
+    { label: '4', value: '4' },
+    { label: '5', value: '5' },
+    { label: '6', value: '6' },
+    { label: '×', value: '*' },
     { label: 'tan', value: 'tan(' },
     { label: 'log', value: 'log(' },
+    
+    { label: '1', value: '1' },
+    { label: '2', value: '2' },
+    { label: '3', value: '3' },
+    { label: '-', value: '-' },
     { label: '(', value: '(' },
     { label: ')', value: ')' },
+    
+    { label: '0', value: '0' },
+    { label: '.', value: '.' },
+    { label: '=', value: '=' },
+    { label: '+', value: '+' },
+    { label: '√', value: 'Sqrt(' },
+    { label: 'π', value: 'pi' },
+    
+    { label: 'x', value: 'x' },
+    { label: 'y', value: 'y' },
+    { label: 'e', value: 'E' },
+    { label: '^2', value: '^2' },
+    { label: '^n', value: '^' },
+    { label: 'd/dx', value: 'd/dx(' },
+
+    { label: '∫', value: 'integrate ' },
+    { label: 'lim', value: 'Limit(' },
+    { label: ',', value: ',' },
+    { label: '<', value: '<' },
+    { label: '>', value: '>' },
+    { label: '!', value: '!' },
   ];
 
   return (

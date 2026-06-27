@@ -31,6 +31,24 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler({
+            org.matheclipse.parser.client.SyntaxError.class,
+            org.matheclipse.core.eval.exception.MathException.class
+    })
+    public ResponseEntity<Map<String, String>> handleMathExceptions(Exception ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("error", "Unable to parse the mathematical equation. Please check your syntax, balance your parentheses, or crop the image tighter.");
+        error.put("details", ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(org.springframework.web.multipart.MaxUploadSizeExceededException.class)
+    public ResponseEntity<Map<String, String>> handleMaxSizeException(org.springframework.web.multipart.MaxUploadSizeExceededException exc) {
+        Map<String, String> error = new HashMap<>();
+        error.put("error", "Image file size exceeds the 10MB limit. Please compress the image or upload a smaller file.");
+        return new ResponseEntity<>(error, HttpStatus.PAYLOAD_TOO_LARGE);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, String>> handleGeneralException(Exception ex) {
         Map<String, String> error = new HashMap<>();

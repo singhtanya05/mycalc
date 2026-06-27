@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 @Service
 public class SolverService {
@@ -35,20 +38,27 @@ public class SolverService {
         String latexRepresentation = "";
 
         try {
-            switch (detectedType.toLowerCase()) {
-                case "derivative":
-                    return handleDerivative(normalizedInput, steps);
-                case "integral":
-                    return handleIntegral(normalizedInput, steps);
-                case "limit":
-                    return handleLimit(normalizedInput, steps);
-                case "algebra":
-                default:
-                    return handleAlgebra(normalizedInput, steps);
-            }
+            final String fDetectedType = detectedType;
+            return CompletableFuture.supplyAsync(() -> {
+                switch (fDetectedType.toLowerCase()) {
+                    case "derivative":
+                        return handleDerivative(normalizedInput, steps);
+                    case "integral":
+                        return handleIntegral(normalizedInput, steps);
+                    case "limit":
+                        return handleLimit(normalizedInput, steps);
+                    case "algebra":
+                    default:
+                        return handleAlgebra(normalizedInput, steps);
+                }
+            }).get(10, TimeUnit.SECONDS);
+        } catch (TimeoutException e) {
+            log.error("Solver timed out for equation: {}", equation);
+            throw new IllegalArgumentException("The equation is too complex to be solved within the time limit.");
         } catch (Exception e) {
             log.error("Error solving equation", e);
-            throw new IllegalArgumentException("Could not solve the expression. Please check the syntax: " + e.getMessage());
+            Throwable cause = e.getCause() != null ? e.getCause() : e;
+            throw new IllegalArgumentException("Could not solve the expression. Please check the syntax: " + cause.getMessage(), cause);
         }
     }
 

@@ -472,6 +472,7 @@ body {
   font-size: 1.15rem;
   line-height: 2.2rem;
   color: #334155;
+  overflow-x: auto;
 }
 
 .step-header {
@@ -492,6 +493,7 @@ body {
   position: relative;
   z-index: 2;
   box-shadow: inset 0 0 15px rgba(244, 63, 94, 0.02);
+  overflow-x: auto;
 }
 
 /* Neon styled top Final Answer Box */

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Configuration Variables
-IP="15.135.213.23"
+IP="${1:-your_ec2_ip_here}"
 KEY_PATH="./mycalc-key.pem"
 REMOTE_USER="ubuntu"
 JAR_NAME="calc-backend-0.0.1-SNAPSHOT.jar"

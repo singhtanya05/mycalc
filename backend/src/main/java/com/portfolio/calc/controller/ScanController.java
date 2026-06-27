@@ -56,7 +56,11 @@ public class ScanController {
                 latex = latex.replace("\\\\", "\\");
 
                 log.info("Local LaTeX-OCR returned LaTeX: '{}'", latex);
-                response.put("equation", latex);
+                
+                String cleanedLatex = cleanOcrLatex(latex);
+                log.info("Cleaned LaTeX: '{}'", cleanedLatex);
+
+                response.put("equation", cleanedLatex);
                 response.put("problemType", "auto");
                 return ResponseEntity.ok(response);
             }
@@ -93,7 +97,10 @@ public class ScanController {
                     String latex = (String) body.get("latex");
                     log.info("Mathpix API returned LaTeX: '{}'", latex);
 
-                    response.put("equation", latex);
+                    String cleanedLatex = cleanOcrLatex(latex);
+                    log.info("Cleaned LaTeX: '{}'", cleanedLatex);
+
+                    response.put("equation", cleanedLatex);
                     response.put("problemType", "auto");
                     return ResponseEntity.ok(response);
                 }
@@ -119,5 +126,26 @@ public class ScanController {
             response.put("problemType", "algebra");
         }
         return ResponseEntity.ok(response);
+    }
+
+    private String cleanOcrLatex(String latex) {
+        if (latex == null) return "";
+        // Remove \text{...}, \textbf{...}, \textit{...} blocks
+        String cleaned = latex.replaceAll("\\\\text(?:bf|it)?\\{[^}]*\\}", "");
+        
+        // Remove common instructional words and stray English (case-insensitive)
+        String[] ignoreWords = {
+            "integration", "substitution", "example", "questions", "maths", 
+            "level", "jacks", "jack", "find", "solve", "evaluate", "calculate",
+            "determine", "the", "integral", "derivative", "value", "of", "a"
+        };
+        for (String word : ignoreWords) {
+            cleaned = cleaned.replaceAll("(?i)\\b" + word + "\\b", "");
+        }
+        
+        // Remove stray hyphens from words like A-Level
+        cleaned = cleaned.replaceAll("(?i)\\b[a-z]-[a-z]+\\b", "");
+        
+        return cleaned.trim();
     }
 }

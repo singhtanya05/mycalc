@@ -1,105 +1,113 @@
-# Antigravity Math Solver (Portfolio Project)
+# mycalc - Advanced Computer Algebra System (CAS) & Math Solver 🚀
 
-A freelance-portfolio-grade full-stack web application that solves algebra, calculus (derivatives and integrals), and limit problems step-by-step. Users can input equations manually using a virtual mathematical keyboard or upload/scan images of equations using the built-in Mathpix OCR pipeline.
+Welcome to **mycalc**, an advanced, full-stack mathematical solving engine. This project serves as a comprehensive Computer Algebra System (CAS) featuring a premium glassmorphic UI, a custom interactive scientific keyboard, image-based OCR equation scanning, and a robust Java-based mathematical engine capable of performing step-by-step calculus and algebraic derivations.
 
-Built to enterprise engineering standards with **Spring Boot** (backend), **React + Vite** (frontend), **Symja** (algebraic math engine), and **KaTeX** (offline mathematical formula typesetting).
-
----
-
-## Technical Stack & Architecture
+## 🏗 System Architecture Flow
 
 ```mermaid
 graph TD
-    UI[Vite / React UI] -->|POST /api/v1/solve| Controller[SolveController]
-    UI -->|POST /api/v1/scan| ScanController[ScanController]
-    ScanController -->|Local Mock / Base64 Payload| Mathpix[Mathpix LaTeX API]
-    Controller -->|Walk AST & Evaluate| Solver[SolverService]
-    Solver -->|Math Engine| Symja[Symja Matheclipse Core]
-    Solver -->|LaTeX Output| UI
+    Client["React + Vite Frontend"]
+    API["Spring Boot REST API"]
+    Mathpix["Mathpix Cloud API"]
+    Pix2Tex["Local Pix2Tex / LaTeX-OCR Server"]
+    
+    Client -->|"HTTP POST /api/v1/solve"| API
+    Client -->|"HTTP POST Multipart Image"| API
+    
+    subgraph Backend ["Backend Infrastructure"]
+        Preprocessor["Input Sanitizer"]
+        Symja["Symja Math Engine"]
+        OCR_Router{"OCR Router"}
+        Formatter["TeXFormFactory"]
+        
+        API -->|"Parse Equation"| Preprocessor
+        Preprocessor -->|"Evaluate AST"| Symja
+        Symja -->|"AST to LaTeX"| Formatter
+        Formatter -->|"JSON Response"| API
+        
+        API -->|"Scan Image"| OCR_Router
+    end
+    
+    OCR_Router -->|"Option A: Mathpix Keys"| Mathpix
+    OCR_Router -->|"Option B: Local Fallback"| Pix2Tex
+    
+    Mathpix -->|"Extracted LaTeX"| API
+    Pix2Tex -->|"Extracted LaTeX"| API
+    
+    API -->|"Render Result"| Client
 ```
 
-- **Frontend**: React 19, Vite, Lucide Icons, KaTeX, Vanilla CSS (with glassmorphism, responsive grids, and customized dark theme).
-- **Backend**: Spring Boot 3.3.x, Java 21/25, Maven, Spring Boot Actuator, Springdoc OpenAPI.
-- **Math Solver**: Symja Core (Matheclipse) for symbolic evaluation and AST structure parsing.
-- **OCR Engine**: Mathpix API (uses real endpoint when API credentials are provided; falls back to a smart mock simulator for offline testing).
-- **Security**: In-memory IP-based Token Bucket rate limiting filter on API endpoints to protect OCR billing budgets, payload size limits (2MB max upload), and strict CORS mapping.
+## ⚙️ Core Technologies
 
----
+- **Frontend (Vite + React)**
+  - Developed with React for robust state management and Vite for optimized build performance.
+  - UI styled entirely with pure CSS implementing a custom **glassmorphism** design system.
+  - Uses `katex` for high-fidelity rendering of complex mathematical steps.
+  - Features a custom-built 36-key interactive scientific math keyboard for tactile input.
 
-## Key Design Decisions
+- **Backend (Spring Boot + Java 21)**
+  - Scalable REST API built with Spring Boot.
+  - **Math Engine**: Integrates `matheclipse/Symja` for advanced Abstract Syntax Tree (AST) evaluation, calculus (derivatives, integrals, limits), and equation simplification.
+  - Engineered with robust error handling and execution timeouts to safely handle infinitely complex or unsolvable inputs.
 
-1. **Why Symja (Matheclipse) instead of basic eval?**
-   Evaluating mathematical equations symbolically requires a computer algebra system (CAS) capable of parsing mathematical Abstract Syntax Trees (ASTs). Symja provides a powerful Java-based environment equivalent to Mathematica, enabling symbolic differentiation, integration, limits, and equation simplification without external Python dependencies like SymPy.
+- **Optical Character Recognition (OCR) Engine**
+  - **Primary**: Integrates with the **Mathpix API** for highly accurate image-to-LaTeX conversion, resilient to messy handwriting and mixed-text textbook photos.
+  - **Secondary (Open Source Fallback)**: Capable of routing requests to a local instance of the open-source **`LaTeX-OCR` (Pix2Tex)** Python model for fully offline equation extraction.
 
-2. **Recursive Rule-Based Step Generation**:
-   Symja does not natively produce pedagogical step-by-step derivations. To solve this, a recursive walk of the Symja AST was implemented (in `SolverService`). It identifies function structures (e.g. Sum, Product, Constant Multiplier, Power, Chain rule patterns) and logs mathematical derivations with correct LaTeX typesetting at each reduction step.
+## 🛠 Dependencies
+### Frontend
+- `react`, `react-dom`
+- `lucide-react` (SVG Icons)
+- `katex` (Mathematical typesetting)
 
-3. **Custom In-Memory Token Bucket Rate Limiting**:
-   Rather than importing large external stateful dependencies, a clean, thread-safe, custom token bucket rate limiter (`RateLimitingFilter`) was built in pure Java to prevent API abuse, protecting backend processing threads and external Mathpix budget.
+### Backend
+- `spring-boot-starter-web`
+- `symja_core` (Core mathematical parsing and solver engine)
 
----
+## 🚀 How to Run Locally (Docker - Recommended)
+The standard and most reliable way to run the full application (Frontend + Backend + Nginx Reverse Proxy) is via Docker Compose.
 
-## API Documentation (OpenAPI/Swagger)
+1. Ensure Docker Desktop is running.
+2. Clone the repository and navigate to the root directory.
+3. Run the following command:
+   ```bash
+   docker-compose up --build
+   ```
+4. Access the application via `http://localhost`.
 
-When the backend is running, you can explore and test the interactive APIs directly in your browser:
-- **Swagger UI**: [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
-- **OpenAPI JSON Spec**: [http://localhost:8080/v3/api-docs](http://localhost:8080/v3/api-docs)
+## 💻 How to Run Locally (Manual Development)
+For active development on independent microservices:
 
----
-
-## Local Setup & Run Instructions
-
-### 1. Prerequisites
-- **Node.js**: v18+
-- **Java JDK**: 21 or 25
-- **Maven**: 3.9+
-
-### 2. Run the Backend
-Navigate to the `backend/` directory:
+### 1. Start the Spring Boot Backend
 ```bash
 cd backend
 mvn spring-boot:run
 ```
-To run with real Mathpix API scanning, set the environment variables before starting:
-```bash
-export MATHPIX_APP_ID="your_app_id"
-export MATHPIX_APP_KEY="your_app_key"
-mvn spring-boot:run
-```
+*The API will run on `http://localhost:8081`.*
 
-### 3. Run the Frontend
-Navigate to the `frontend/` directory:
+### 2. Start the Vite React Frontend
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
-Open [http://localhost:5173/](http://localhost:5173/) in your browser.
+*The UI will run on `http://localhost:5173` (or 5174).*
 
----
+## 🔐 Environment Variables (Mathpix OCR)
+To enable accurate cloud-based image scanning, create a free account at [Mathpix](https://mathpix.com/) to obtain API credentials. 
 
-## Running the Verification Tests
-To run unit and integration tests (including AST parsing, derivative rules, limits, and request validations):
+If running via **Docker**, export them in your terminal before launching the containers:
 ```bash
-cd backend
-mvn test
+export MATHPIX_APP_ID="your_app_id"
+export MATHPIX_APP_KEY="your_app_key"
+docker-compose up
 ```
-*(Surefire is configured with bytebuddy flags to fully support JVM testing under Java 25.)*
+*If running manually, configure these within your system environment variables or IDE run configuration.*
 
----
-
-## Production Deployment Guide
-
-1. **Backend (Render / Railway)**:
-   - Create a new project pulling from the Git repo.
-   - Configure the root directory to `backend`.
-   - Set Build Command: `mvn clean package -DskipTests`
-   - Set Start Command: `java -jar target/calc-backend-0.0.1-SNAPSHOT.jar`
-   - Configure Environment Variables: `MATHPIX_APP_ID`, `MATHPIX_APP_KEY`.
-
-2. **Frontend (Vercel)**:
-   - Connect the repo to Vercel.
-   - Set the root directory to `frontend`.
-   - Build Command: `npm run build`
-   - Output Directory: `dist`
-   - Configure proxy routes or update API target URL to production backend link in `App.jsx`.
+## 🚀 Production Deployment (AWS EC2)
+A parameterized deployment script (`deploy.sh`) is provided for deploying directly to an Ubuntu EC2 instance via SSH.
+```bash
+# Usage: ./deploy.sh <your_ec2_ip_address>
+./deploy.sh 203.0.113.50
+```
+*Note: Ensure your `mycalc-key.pem` SSH key is present in the project root.*
