@@ -9,6 +9,7 @@ services:
     environment:
       - MATHPIX_APP_ID=${MATHPIX_APP_ID:-}
       - MATHPIX_APP_KEY=${MATHPIX_APP_KEY:-}
+      - LATEX_OCR_URL=${LATEX_OCR_URL:-}
     restart: unless-stopped
 
   frontend:

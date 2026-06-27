@@ -33,7 +33,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({
             org.matheclipse.parser.client.SyntaxError.class,
-            org.matheclipse.core.eval.exception.MathException.class
+            org.matheclipse.parser.client.math.MathException.class
     })
     public ResponseEntity<Map<String, String>> handleMathExceptions(Exception ex) {
         Map<String, String> error = new HashMap<>();

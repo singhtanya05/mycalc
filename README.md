@@ -93,13 +93,18 @@ npm run dev
 ```
 *The UI will run on `http://localhost:5173` (or 5174).*
 
-## 🔐 Environment Variables (Mathpix OCR)
-To enable accurate cloud-based image scanning, create a free account at [Mathpix](https://mathpix.com/) to obtain API credentials. 
+## 🔐 Environment Variables (OCR Configuration)
+To enable accurate cloud-based image scanning, create a free account at [Mathpix](https://mathpix.com/) to obtain API credentials. Alternatively, if you have deployed the open-source **Pix2Tex / LaTeX-OCR** Python model to your own server, you can point the application to it.
 
 If running via **Docker**, export them in your terminal before launching the containers:
 ```bash
+# Option A: Mathpix (Recommended)
 export MATHPIX_APP_ID="your_app_id"
 export MATHPIX_APP_KEY="your_app_key"
+
+# Option B: Custom Local/Remote Python OCR Server
+export LATEX_OCR_URL="http://your-python-server-ip:8502/predict/"
+
 docker-compose up
 ```
 *If running manually, configure these within your system environment variables or IDE run configuration.*
