@@ -2,6 +2,8 @@
 
 Welcome to **mycalc**, an advanced, full-stack mathematical solving engine. This project serves as a comprehensive Computer Algebra System (CAS) featuring a premium glassmorphic UI, a custom interactive scientific keyboard, image-based OCR equation scanning, and a robust Java-based mathematical engine capable of performing step-by-step calculus and algebraic derivations.
 
+**🌐 Live Demo:** [http://mycalc.duckdns.org/](http://mycalc.duckdns.org/)
+
 ## 🏗 System Architecture Flow
 
 ```mermaid
