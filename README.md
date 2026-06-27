@@ -6,7 +6,7 @@ This project goes beyond a simple calculator; it serves as a robust Computer Alg
 
 **🌐 Live Demo:** [http://mycalc.duckdns.org/](http://mycalc.duckdns.org/)
 
-https://github.com/singhtanya05/mycalc/raw/main/Screen%20Recording%202026-06-27%20at%202.19.02%E2%80%AFPM-1.mov
+![Watch the Demo](demo.gif)
 
 ---
 
