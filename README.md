@@ -6,7 +6,7 @@ This project goes beyond a simple calculator; it serves as a robust Computer Alg
 
 **🌐 Live Demo:** [http://mycalc.duckdns.org/](http://mycalc.duckdns.org/)
 
-<video src="./Screen%20Recording%202026-06-27%20at%202.19.02%E2%80%AFPM-1.mov" controls="controls" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 10px;"></video>
+*(To watch the demo video, please upload it to GitHub as an issue attachment and paste the link here!)*
 
 ---
 
